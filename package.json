@@ -1,0 +1,32 @@
+{
+  "name": "three-wheel-menu",
+  "version": "0.0.1",
+  "source": "src/index.js",
+  "main": "dist/main.js",
+  "description": "rotation menu with three.js",
+  "license": "MIT",
+  "keywords": [
+    "three.js",
+    "3d",
+    "wheel",
+    "rtation",
+    "menu",
+    "circle"
+  ],
+  "author": "szgk",
+  "scripts": {
+    "build": "parcel build",
+    "build:sample": "parcel build sample/index.html --dist-dir sample/dist",
+    "build:sample-prod": "parcel build sample/index.html --dist-dir sample/dist --public-url https://szgk.github.io/three-wheel-menu/sample/dist",
+    "start:sample": "parcel sample/dist/index.html",
+    "start:sample-dist": "serve sample/dist"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.1"
+  },
+  "dependencies": {
+    "html2canvas": "^1.3.3",
+    "serve": "^13.0.2",
+    "three": "^0.135.0"
+  }
+}
