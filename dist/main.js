@@ -23,7 +23,7 @@ const $e15726cc9f000015$export$dc415335785a9a04 = (v1, v2)=>Math.acos(v1.dot(v2)
 
 
 class $a133e694903d6523$var$WheelMenu {
-    constructor(_THREE, scene, camera, canvas, { items: items , radius: radius , origin: origin , rotation: rotation , onClick: onClick , selected: selected , isBidirectional: isBidirectional = false , isReverse: isReverse = false , selectedRotation: selectedRotation ,  }){
+    constructor(_THREE, scene, camera, canvas, { items: items , radius: radius , origin: origin , rotation: rotation , onClick: onClick , onMoved: onMoved , selected: selected , isBidirectional: isBidirectional = false , isReverse: isReverse = false , selectedRotation: selectedRotation ,  }){
         this.scene = scene;
         this.camera = camera;
         this.canvas = canvas;
@@ -33,6 +33,7 @@ class $a133e694903d6523$var$WheelMenu {
         this.wheel = new this.THREE.Object3D() // wrap object
         ;
         this.onClick = onClick;
+        this.onMoved = onMoved;
         this.items = items // item params
         ;
         this.itemParams = {
@@ -212,7 +213,7 @@ class $a133e694903d6523$var$WheelMenu {
             const intersects = raycaster.intersectObjects(this.wheel.children);
             if (intersects && intersects.length > 0 && intersects[0]?.object) {
                 const item = intersects[0]?.object;
-                this.onClick(this.itemParams[item.uuid], item);
+                if (this.onClick) this.onClick(this.itemParams[item.uuid], item);
                 this.moveToItem(item);
             }
         };
@@ -225,6 +226,7 @@ class $a133e694903d6523$var$WheelMenu {
         else {
             this.isRotating = false;
             this.currentItem = this.nextItem;
+            if (this.onMoved) this.onMoved(this.itemParams[this.nextItem.uuid], this.nextItem);
         }
     }
 }
