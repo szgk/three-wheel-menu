@@ -252,7 +252,7 @@ class WheelMenu {
       const intersects = raycaster.intersectObjects(this.wheel.children)
       if(intersects && intersects.length > 0 && intersects[0]?.object) {
         const item = intersects[0]?.object
-        this.onClick(this.itemParams[item.uuid], item)
+        if(this.onClick) this.onClick(this.itemParams[item.uuid], item)
         this.moveToItem(item)
       }
     }
