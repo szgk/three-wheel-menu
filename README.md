@@ -52,6 +52,7 @@ function tick() {
 | origin | `{x: number, y: number, z: number}` | origin of menu. |
 | rotation | `{x: number, y: number, z: number}` | rotation of menu. number is rad. (±0~2π)  |
 | onClick | function | function that is executed when item is clicked. argument: onClick(`{name: string, ...}`, Three.Sprite) |
+| onMoved | function | function that is executed when item moved to selected position. argument: onClick(`{name: string, ...}`, Three.Sprite) |
 | selected | HTMLCanvasElement \| `{name: string, ...}` | default selected item. |
 | isBidirectional | bool | flag that decide rotation direction bidirect or unidirect. |
 | isReverse | bool | flag that rotation direction. |

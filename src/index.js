@@ -12,6 +12,7 @@ class WheelMenu {
       origin,
       rotation,
       onClick,
+      onMoved,
       selected,
       isBidirectional = false,
       isReverse = false,
@@ -30,6 +31,7 @@ class WheelMenu {
     this.radius = radius
     this.wheel = new this.THREE.Object3D() // wrap object
     this.onClick = onClick
+    this.onMoved = onMoved
 
     this.items = items // item params
     this.itemParams = {} // {uuid: item param}
@@ -250,7 +252,7 @@ class WheelMenu {
       const intersects = raycaster.intersectObjects(this.wheel.children)
       if(intersects && intersects.length > 0 && intersects[0]?.object) {
         const item = intersects[0]?.object
-        this.onClick(this.itemParams[item.uuid], item)
+        if(this.onClick) this.onClick(this.itemParams[item.uuid], item)
         this.moveToItem(item)
       }
     }
@@ -266,6 +268,7 @@ class WheelMenu {
     } else {
       this.isRotating = false
       this.currentItem = this.nextItem
+      if(this.onMoved) this.onMoved(this.itemParams[this.nextItem.uuid], this.nextItem)
     }
   }
 
