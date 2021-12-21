@@ -33,7 +33,7 @@ function tick() {
 }
 ```
 
-## Paramater
+## Parameter
 
 ```js
   new WheelMenu(
