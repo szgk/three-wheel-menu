@@ -1,3 +1,9 @@
+/**
+ * get angle formed by vector(x,y) & vector(1,0)
+ * @param {number} x 
+ * @param {number} y 
+ * @returns {number} radian (0 ~ 2π)
+ */
 export const getAngle = (x, y) => {
   if(y === 0) {
     return x >= 0 ? 0 : Math.PI
@@ -10,8 +16,9 @@ export const getAngle = (x, y) => {
   }
 }
 
+/**
+ * change rotation to radius
+ * @param {number} rot rotation
+ * @returns {number} radian
+ */
 export const rotToRad = (rot) => rot * (Math.PI/180)
-
-export const radToRot = (rad) => rad * (180/Math.PI)
-
-export const getFormedAngle = (v1, v2) => Math.acos(v1.dot(v2) / (v1.length() * v2.length())) || 0

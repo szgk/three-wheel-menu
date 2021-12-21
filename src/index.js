@@ -1,6 +1,32 @@
 import {rotToRad, getAngle} from './utils'
 
 class WheelMenu {
+  /**
+   * wheel menu
+   * @param {Three} _THREE Three.js
+   * @param {THREE.Scene} scene THREE.Scene
+   * @param {THREE.PerspectiveCamera} camera THREE.PerspectiveCamera
+   * @param {HTMLCanvasElement} canvas 
+   * @param {Oject}  options optional params 
+   * @param {Item[]}  options.items optional params 
+   * @param {string}  Item.name text as menu item
+   * @param {number}  Item.width item width
+   * @param {number}  Item.height item height
+   * @param {string}  Item.color text color of name
+   * @param {string}  Item.fillStyle item background color
+   * @param {string}  Item.font font of name
+   * @param {string}  Item.fontSize font size of name
+   * @param {number}  Item.padding item paddings
+   * @param {number}  options.radius radius of menu
+   * @param {x: number, y: number, z: number}  options.origin origin of menu
+   * @param {x: number, y: number, z: number}  options.rotation rotation of menu
+   * @param {func}  options.onClick fuction that is executed when click item
+   * @param {func}  options.onMoved fuction that is executed when rotate menu
+   * @param {Item}  options.selected Item that selected at initialization
+   * @param {boolean}  options.isBidirectional flag to decide whether rotation is bidirectional or unidirectional
+   * @param {boolean}  options.isReverse flag to change rotation direction
+   * @param {number}  options.selectedRotation rotation when Item is selected
+   */
   constructor(
     _THREE,
     scene,
@@ -53,6 +79,7 @@ class WheelMenu {
     this.X_VECTOR = new this.THREE.Vector2(1, 0)
     this.ITEM_RATIO = 4
 
+    // apply selectedRotation
     if(selectedRotation) {
       const frontRad = rotToRad(selectedRotation)
       const x = this.radius * Math.cos(frontRad)
@@ -64,6 +91,7 @@ class WheelMenu {
     const itemNum = items.length
     const deg = 360/itemNum
 
+    // apply rotation & oriin to menu
     this.wheel.rotation.x = rotation.x
     this.wheel.rotation.y = rotation.y
     this.wheel.rotation.z = rotation.z
@@ -82,8 +110,8 @@ class WheelMenu {
       )
 
       const item = isCanvas
-        ? this.createCanvasSplite(items[i])
-        : this.createTextSplite({
+        ? this.getCanvasSplite(items[i])
+        : this.getTextSplite({
           text: items[i].name,
           width: items[i].width || 300,
           height: items[i].height,
@@ -125,10 +153,14 @@ class WheelMenu {
       i = (e.deltaY > 0)
         ? (i-1) < 0 ? this.itemList.length-1 : (i-1)
         : (i+1) >= this.itemList.length ? 0 : (i+1)
-      this.moveToItem(this.itemList[i])
+      this.rotateMenuToSelectedPosition(this.itemList[i])
     })
   }
 
+  /**
+   * rotate menu
+   * @param {number} rad 
+   */
   rotateMenu(rad) {
     this.itemList.forEach((item) => {
       const {x, y} = item.position
@@ -142,7 +174,11 @@ class WheelMenu {
     })
   }
 
-  moveToItem(item) {
+  /**
+   * rotate menu to selected position
+   * @param {Item} item 
+   */
+  rotateMenuToSelectedPosition(item) {
     this.nextItem = item
     const vector = new this.THREE.Vector2(item.position.x, item.position.y)
     vector.normalize()
@@ -152,15 +188,26 @@ class WheelMenu {
     }
   }
 
+  /**
+   * get radian between any vector & vector to selected positon
+   * @param {Three.Vector2} vector 
+   * @returns {number} radian between any vector & vector to selected positon
+   */
   getAngleToSelected(vector) {
     vector.normalize()
     const frontAngle = getAngle(this.selectedVector.x, this.selectedVector.y)
     const targetAngle = getAngle(vector.x, vector.y)
-    let angle = Math.abs(frontAngle - targetAngle)
-    angle = angle < 0.1 && angle > 0.01 ? 0 : angle
-    return angle
+    let rad = Math.abs(frontAngle - targetAngle)
+    rad = angle < 0.1 && angle > 0.01 ? 0 : angle
+    return rad
   }
 
+  /**
+   * get text size on canvas
+   * @param {string} text 
+   * @param {string} font 
+   * @returns {width: number, height: number} text width & height
+   */
   getTextSizeOnCanvas(text, font) {
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
@@ -170,6 +217,11 @@ class WheelMenu {
     return {width, height}
   }
 
+  /**
+   * get rotation direction to selected position as ±1
+   * @param {*} vector vector of any item 
+   * @returns {number} rotation direction
+   */
   getRotationDirection(vector) {
     let sign = 1
     if(!this.isBidirectional) {
@@ -187,7 +239,19 @@ class WheelMenu {
     return this.isReverse ? sign * -1 : sign
   }
 
-  createTextSplite({
+  /**
+   * get Three.Sprite with any string
+   * @param {string} params.text
+   * @param {number} params.width
+   * @param {number} params.height
+   * @param {string} params.color
+   * @param {string} params.fillStyle
+   * @param {string} params.fontStyle
+   * @param {number} params.fontSize
+   * @param {number} params.padding
+   * @returns {Three.Sprite} Three.js Sprite object
+   */
+  getTextSplite({
     text,
     width = 0,
     height = 0,
@@ -225,7 +289,12 @@ class WheelMenu {
     return sprite
   }
 
-  createCanvasSplite(canvas) {
+  /**
+   * get Three.Sprite with any HTMLCanvasElement
+   * @param {HTMLCanvasElement} canvas
+   * @returns {Three.Sprite} Three.js Sprite object
+   */
+  getCanvasSplite(canvas) {
     const texture = new this.THREE.Texture(canvas) 
     texture.needsUpdate = true
 
@@ -235,6 +304,9 @@ class WheelMenu {
     return sprite
   }
 
+  /**
+   * add onClick event to wheel menu
+   */
   addClickEvent() {
     // register mouse click event
     const mouse = new this.THREE.Vector2()
@@ -253,13 +325,16 @@ class WheelMenu {
       if(intersects && intersects.length > 0 && intersects[0]?.object) {
         const item = intersects[0]?.object
         if(this.onClick) this.onClick(this.itemParams[item.uuid], item)
-        this.moveToItem(item)
+        this.rotateMenuToSelectedPosition(item)
       }
     }
 
     this.canvas.addEventListener('click', handleMouseClick)
   }
 
+  /**
+   * execute animation
+   */
   tick() {
     if(this.isRotating === false) return
     const angle = this.getAngleToSelected(new this.THREE.Vector2(this.nextItem.position.x, this.nextItem.position.y))
