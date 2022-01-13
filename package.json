@@ -1,6 +1,6 @@
 {
   "name": "three-wheel-menu",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "source": "src/index.js",
   "description": "rotation menu with three.js",
   "license": "MIT",
