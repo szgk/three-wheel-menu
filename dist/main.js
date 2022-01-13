@@ -150,9 +150,9 @@ class $a133e694903d6523$var$WheelMenu {
     /**
    * rotate menu to selected position
    * @param {Item} item 
-   */ rotateMenuToSelectedPosition(item1) {
-        this.nextItem = item1;
-        const vector = new this.THREE.Vector2(item1.position.x, item1.position.y);
+   */ rotateMenuToSelectedPosition(item) {
+        this.nextItem = item;
+        const vector = new this.THREE.Vector2(item.position.x, item.position.y);
         vector.normalize();
         this.rotationDirection = this.getRotationDirection(vector);
         if (!this.isRotating && this.currentItem.uuid !== this.nextItem.uuid) this.isRotating = true;
@@ -189,11 +189,11 @@ class $a133e694903d6523$var$WheelMenu {
    * get rotation direction to selected position as ±1
    * @param {*} vector vector of any item 
    * @returns {number} rotation direction
-   */ getRotationDirection(vector1) {
+   */ getRotationDirection(vector) {
         let sign = 1;
         if (!this.isBidirectional) {
             const frontAngle = $e15726cc9f000015$export$b363da9ded343252(this.selectedVector.x, this.selectedVector.y);
-            const targetAngle = $e15726cc9f000015$export$b363da9ded343252(vector1.x, vector1.y);
+            const targetAngle = $e15726cc9f000015$export$b363da9ded343252(vector.x, vector.y);
             const subTarget = Math.abs(frontAngle - targetAngle);
             const subFrom360 = Math.abs(Math.PI * 2 - subTarget);
             if (frontAngle > targetAngle) sign = subTarget > subFrom360 ? -1 : 1;
@@ -212,10 +212,10 @@ class $a133e694903d6523$var$WheelMenu {
    * @param {number} params.fontSize
    * @param {number} params.padding
    * @returns {Three.Sprite} Three.js Sprite object
-   */ getTextSplite({ text: text1 , width: width = 0 , height: height = 0 , color: color = '#000' , fillStyle: fillStyle = '#fff' , fontStyle: fontStyle = 'sans-serif' , fontSize: fontSize = 30 , padding: padding = 0 ,  }) {
+   */ getTextSplite({ text: text , width: width = 0 , height: height = 0 , color: color = '#000' , fillStyle: fillStyle = '#fff' , fontStyle: fontStyle = 'sans-serif' , fontSize: fontSize = 30 , padding: padding = 0 ,  }) {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        const { width: w , height: h  } = this.getTextSizeOnCanvas(text1, `${fontSize * this.ITEM_RATIO}px ${fontStyle}`);
+        const { width: w , height: h  } = this.getTextSizeOnCanvas(text, `${fontSize * this.ITEM_RATIO}px ${fontStyle}`);
         canvas.width = (width || w) + padding * 2;
         canvas.height = (height || h) + padding * 2;
         context.font = `${fontSize * this.ITEM_RATIO}px ${fontStyle}`;
@@ -226,7 +226,7 @@ class $a133e694903d6523$var$WheelMenu {
         context.fillStyle = color;
         const textX = (width || canvas.width) / 2 - w / 2;
         const textY = (height || canvas.height) / 2 + h / 2;
-        context.fillText(text1, textX, textY);
+        context.fillText(text, textX, textY);
         const texture = new this.THREE.Texture(canvas);
         texture.needsUpdate = true;
         const material = new this.THREE.SpriteMaterial({
@@ -242,8 +242,8 @@ class $a133e694903d6523$var$WheelMenu {
    * get Three.Sprite with any HTMLCanvasElement
    * @param {HTMLCanvasElement} canvas
    * @returns {Three.Sprite} Three.js Sprite object
-   */ getCanvasSplite(canvas1) {
-        const texture = new this.THREE.Texture(canvas1);
+   */ getCanvasSplite(canvas) {
+        const texture = new this.THREE.Texture(canvas);
         texture.needsUpdate = true;
         const material = new this.THREE.SpriteMaterial({
             map: texture,
@@ -251,7 +251,7 @@ class $a133e694903d6523$var$WheelMenu {
             sizeAttenuation: true
         });
         const sprite = new this.THREE.Sprite(material);
-        sprite.scale.set(canvas1.width / this.ITEM_RATIO, canvas1.height / this.ITEM_RATIO, 1);
+        sprite.scale.set(canvas.width / this.ITEM_RATIO, canvas.height / this.ITEM_RATIO, 1);
         return sprite;
     }
     /**
