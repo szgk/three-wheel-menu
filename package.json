@@ -2,7 +2,6 @@
   "name": "three-wheel-menu",
   "version": "0.0.3",
   "source": "src/index.js",
-  "main": "dist/main.js",
   "description": "rotation menu with three.js",
   "license": "MIT",
   "keywords": [
@@ -18,7 +17,6 @@
     "build": "parcel build",
     "build:sample": "parcel build sample/index.html --dist-dir sample/dist",
     "build:sample-prod": "parcel build sample/index.html --dist-dir sample/dist --public-url https://szgk.github.io/three-wheel-menu/sample/dist",
-    "start:sample": "parcel sample/dist/index.html",
     "start:sample-dist": "serve sample/dist"
   },
   "devDependencies": {

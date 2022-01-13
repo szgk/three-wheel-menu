@@ -166,7 +166,7 @@ class $a133e694903d6523$var$WheelMenu {
         const frontAngle = $e15726cc9f000015$export$b363da9ded343252(this.selectedVector.x, this.selectedVector.y);
         const targetAngle = $e15726cc9f000015$export$b363da9ded343252(vector.x, vector.y);
         let rad = Math.abs(frontAngle - targetAngle);
-        rad = angle < 0.1 && angle > 0.01 ? 0 : angle;
+        rad = rad < 0.1 && rad > 0.01 ? 0 : rad;
         return rad;
     }
     /**

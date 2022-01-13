@@ -198,7 +198,7 @@ class WheelMenu {
     const frontAngle = getAngle(this.selectedVector.x, this.selectedVector.y)
     const targetAngle = getAngle(vector.x, vector.y)
     let rad = Math.abs(frontAngle - targetAngle)
-    rad = angle < 0.1 && angle > 0.01 ? 0 : angle
+    rad = rad < 0.1 && rad > 0.01 ? 0 : rad
     return rad
   }
 
